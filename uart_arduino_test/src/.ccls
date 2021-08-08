@@ -1,0 +1,2 @@
+gcc
+-I/home/willmish/Projects/Beagleboard/zephyrproject/zephyr/include
