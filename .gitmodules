@@ -1,0 +1,3 @@
+[submodule "boards/arm/wio_terminal_zephyr_board"]
+	path = boards/arm/wio_terminal_zephyr_board
+	url = https://github.com/Willmish/wio_terminal_zephyr_board
