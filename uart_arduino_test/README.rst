@@ -1,44 +1,33 @@
-.. _blinky-sample:
+.. _uart-test:
 
-Blinky
+UART test
 ######
 
 Overview
 ********
 
-Blinky is a simple application which blinks an LED forever using the :ref:`GPIO
-API <gpio_api>`. The source code shows how to configure GPIO pins as outputs,
-then turn them on and off.
+This program opens a ttyACM port using CDC ACM after which it listens to messages incoming on UART and logs them to the ttyACM port.
 
-See :ref:`pwm-blinky-sample` for a sample which uses the PWM API to blink an
-LED.
-
-.. _blinky-sample-requirements:
+CURRENTLY does not work, uart_poll_in() keeps returning 0 and no meaningful characters get through, even when no characters are sent to its RX pin.
+.. _uart-test-requirements:
 
 Requirements
 ************
 
-You will see this error if you try to build Blinky for an unsupported board:
-
-.. code-block:: none
-
-   Unsupported board: led0 devicetree alias is not defined
-
-The board must have an LED connected via a GPIO pin. These are called "User
-LEDs" on many of Zephyr's :ref:`boards`. The LED must be configured using the
-``led0`` :ref:`devicetree <dt-guide>` alias. This is usually done in the
-:ref:`BOARD.dts file <devicetree-in-out-files>` or a :ref:`devicetree overlay
-<set-devicetree-overlays>`.
+In order to run the demo:
+-Wio Terminal TX/RX connected to Beagleconnect/UART device RX/TX. Both devices connected to common ground.
+-Flash the program to the Wio Terminal
+-open a serial monitior to the port created by Wio Terminal (/dev/ttyACM0 by default)
+-Flash `uart_test` program on the beagleconnect/UART device. (found here: https://github.com/Willmish/beagleconnect/tree/master/sw/zephyrproject/uart_test)
+-Open a serial monitor to the port created by the beagleconnect/UART device (/dev/ttyACM0 by default, will be /dev/ttyACM1 if plugged in after Wio Terminal)
 
 Building and Running
 ********************
 
-Build and flash Blinky as follows, changing ``reel_board`` for your board:
+to build and flash the program, use the supplied flashing scripts: 
 
-.. zephyr-app-commands::
-   :zephyr-app: samples/basic/blinky
-   :board: reel_board
-   :goals: build flash
-   :compact:
+BUILDING:
+https://github.com/Willmish/zephyr/blob/wio_terminal_support/wio_terminal_build.sh
 
-After flashing, the LED starts to blink. Blinky does not print to the console.
+FLASHING:
+https://github.com/Willmish/zephyr/blob/wio_terminal_support/wio_terminal_flash_uart_test.sh
