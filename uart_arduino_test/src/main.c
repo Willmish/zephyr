@@ -101,10 +101,7 @@ void main(void)
         LOG_ERR("UART0 device not found");
     	return;
     }
-    char buf[10];
     ret = uart_configure(uart_dev, &uart_cfg);
-    snprintf(buf, 10, "%d", ret);
-    LOG_INF("%s", log_strdup(buf));
     if (!device_is_ready(uart_dev)) {
 		LOG_WRN("UART device not ready\n");
 		return;
@@ -116,12 +113,7 @@ void main(void)
 	while (1) {
 		gpio_pin_set(dev, PIN, (int)led_is_on);
         if (uart_poll_in(uart_dev, &rec_char) == 0)
-            LOG_INF("Received char: '%c'", rec_char);
-        //if (led_is_on)
-        //    uart_poll_out(uart_dev, '1');
-        //else
-        //    uart_poll_out(uart_dev, '0');
-		led_is_on = !led_is_on;
+            LOG_INF("Received char nr: %d, char: '%c'", (int) rec_char, rec_char);
 		k_msleep(SLEEP_TIME_MS);
 	}
 }
