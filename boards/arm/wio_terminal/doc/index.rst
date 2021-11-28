@@ -1,6 +1,6 @@
-.. _adafruit_itsybitsy_m4_express:
+.. _wio_terminal:
 
-Adafruit ItsyBitsy M4 Express
+Wio Terminal
 #############################
 
 Overview
@@ -10,27 +10,31 @@ The Adafruit ItsyBitsy M4 express is a small (36 mm x 18 mm) ARM development
 board with an onboard RGB LED, USB port, 2 MiB of SPI flash, and range of I/O
 broken out onto 23 GPIO pins.
 
-.. image:: img/adafruit_itsybitsy_m4_express.png
+.. image:: img/wio_terminal.png
      :width: 500px
      :align: center
-     :alt: Adafruit ItsyBitsy M4 Express
+     :alt: Wio Terminal
 
 Hardware
 ********
 
-- ATSAMD51G19A ARM Cortex-M4 processor at 120 MHz
-- 512 KiB of flash memory and 192 KiB of RAM
-- 2 MiB of SPI flash
+- primary chip: ATSAMD51P19 ARM Cortex-M4 processor at 120 MHzF
+- 512 KB of flash memory and 192 KB of RAM
+- 4 MB of external flash
+- wireless connectivity chip: RTL8720DN dual core: ARM® Cortex®-M4F @ 200MHz & ARM® Cortex®-M0
 - Internal trimmed 8 MHz oscillator
+
+- 2.4inch LCD display
 - A user LED
-- An RGB DotStar LED
-- Native USB port
-- One reset button
+- 3x user buttons
+- 1x 5-way user button
+- USB C port
+- power/reset/boot mode switch
 
 Supported Features
 ==================
 
-The adafruit_itsybitsy_m4_express board configuration supports the following
+The wio_terminal board configuration supports the following
 hardware features:
 
 +-----------+------------+------------------------------------------+
@@ -64,7 +68,7 @@ hardware features:
 Other hardware features are not currently supported by Zephyr.
 
 The default configuration can be found in the Kconfig file
-:zephyr_file:`boards/arm/adafruit_itsybitsy_m4_express/adafruit_itsybitsy_m4_express_defconfig`.
+:zephyr_file:`boards/arm/wio_terminal/wio_terminal_defconfig`.
 
 Zephyr can use the default Cortex-M SYSTICK timer or the SAM0 specific RTC.
 To use the RTC, set :code:`CONFIG_CORTEX_M_SYSTICK=n` and set
