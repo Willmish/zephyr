@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2021 Szymon Duchniewicz
- * Copyright (c) 2020 Google LLC.
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -13,8 +12,8 @@
 	compatible = "seeed,wio-terminal";
 
 	chosen {
-		zephyr,console = &seeed_cdc_acm_uart;
-		zephyr,shell-uart = &seeed_cdc_acm_uart;
+		zephyr,console = &sercom2;
+		zephyr,shell-uart = &sercom2;
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
 		zephyr,code-partition = &code_partition;
@@ -125,8 +124,8 @@ zephyr_udc0: &usb0 {
     compatible = "atmel,sam0-usb";
 	status = "okay";
 
-    seeed_cdc_acm_uart: seeed_cdc_acm_uart {
-        compatible = "zephyr,cdc-acm-uart";
-        label = "CDC_ACM_0";
-    };
+    //seeed_cdc_acm_uart: seeed_cdc_acm_uart {
+    //    compatible = "zephyr,cdc-acm-uart";
+    //    label = "CDC_ACM_0";
+    //};
 };
