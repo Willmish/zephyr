@@ -6,9 +6,10 @@ Wio Terminal
 Overview
 ********
 
-The Adafruit ItsyBitsy M4 express is a small (36 mm x 18 mm) ARM development
-board with an onboard RGB LED, USB port, 2 MiB of SPI flash, and range of I/O
-broken out onto 23 GPIO pins.
+The WIo Terminal is a small (72 mm x 57 mm x 12 mm) and powerful ARM board
+with wireless connectivity (bluetooth and 2.4GHz/5GHz Wi-Fi), LCD display,
+USB C port, FPC connector, MicroSD card slot, Raspberry pi compatible 40pin
+header and 2 Grove connectors.
 
 .. image:: img/wio_terminal.png
      :width: 500px
@@ -18,6 +19,7 @@ broken out onto 23 GPIO pins.
 Hardware
 ********
 
+Chips:
 - primary chip: ATSAMD51P19 ARM Cortex-M4 processor at 120 MHzF
 - 512 KB of flash memory and 192 KB of RAM
 - 4 MB of external flash
@@ -26,9 +28,23 @@ Hardware
 
 - 2.4inch LCD display
 - A user LED
+
+Built-in Modules:
+- Accelerometer LIS3DHTR
+- Microphone 1.0V-10V -42dB
+- Speaker ≥78dB @10cm 4000Hz
+- Light Sensor 400-1050nm
+- Infrared Emitter 940nm
+
+Interface:
+- MicroSD Card Slot
+- GPIO 40 pin (Raspberry Pi compatible)
+- 2x Grove connectors
+- USB C port (Power & USB-OTG)
+
+Operation Interface:
 - 3x user buttons
-- 1x 5-way user button
-- USB C port
+- 5-way user button
 - power/reset/boot mode switch
 
 Supported Features
@@ -50,8 +66,6 @@ hardware features:
 +-----------+------------+------------------------------------------+
 | USART     | on-chip    | Serial ports                             |
 +-----------+------------+------------------------------------------+
-| SPI       | on-chip    | Serial Peripheral Interface ports        |
-+-----------+------------+------------------------------------------+
 | TRNG      | on-chip    | True Random Number Generator             |
 +-----------+------------+------------------------------------------+
 | HWINFO    | on-chip    | Unique 128 bit serial number             |
@@ -61,8 +75,6 @@ hardware features:
 | USB       | on-chip    | USB device                               |
 +-----------+------------+------------------------------------------+
 | WDT       | on-chip    | Watchdog Timer                           |
-+-----------+------------+------------------------------------------+
-| PWM       | on-chip    | PWM                                      |
 +-----------+------------+------------------------------------------+
 
 Other hardware features are not currently supported by Zephyr.
@@ -78,7 +90,7 @@ i.e. no more than 4500.
 Connections and IOs
 ===================
 
-The `Adafruit Learning System`_ has detailed information about
+The `Wio Terminal Getting started guide`_ has detailed information about
 the board including `pinouts`_ and the `schematic`_.
 
 System Clock
@@ -90,22 +102,8 @@ with the on-chip PLL generating the 120 MHz system clock.
 Serial Port
 ===========
 
-The SAMD51 MCU has 6 SERCOM based USARTs.  On the ItsyBitsy, SERCOM3 is
-the Zephyr console and is available on pins 0 (RX) and 1 (TX).
-
-SPI Port
-========
-
-The SAMD51 MCU has 6 SERCOM based SPIs.  On the ItsyBitsy, SERCOM1 can be put
-into SPI mode and used to connect to devices over the SCK (SCLK), MO (MOSI), and
-MI (MISO) pins.
-
-PWM
-===
-
-The SAMD51 has three PWM generators with up to six channels each.  :code:`TCC_0`
-has a resolution of 24 bits and all other generators are 16 bit.  :code:`TCC_1`
-pin 2 is mapped to PA18 (D7) and pin 3 is mapped to PA19 (D9).
+The SAMD51 MCU has 6 SERCOM based USARTs. On the Wio Terminal, SERCOM3 is
+the Zephyr console and is available on pins 10 (RX) and 8 (TX).
 
 USB Device Port
 ===============
@@ -118,11 +116,11 @@ serial port that echos characters back to the host PC.
 Programming and Debugging
 *************************
 
-The ItsyBitsy ships with a the BOSSA compatible UF2 bootloader.  The
+The Wio Terminal ships with a the BOSSA compatible UF2 bootloader.  The
 bootloader can be entered by quickly tapping the reset button twice.
 
 Additionally, if :code:`CONFIG_USB_CDC_ACM` is enabled then the bootloader
-will be entered automatically when you run :code:`west flash`.
+will be entered automatically when you run :code:`west flash`. (Note: The board may not enter bootloader after the first `west flash` call)
 
 Flashing
 ========
@@ -200,14 +198,14 @@ References
 
 .. target-notes::
 
-.. _Adafruit Learning System:
-    https://learn.adafruit.com/introducing-adafruit-itsybitsy-m4
+.. _Wio Terminal Getting started guide:
+   https://wiki.seeedstudio.com/Wio-Terminal-Getting-Started/ 
 
 .. _pinouts:
-    https://learn.adafruit.com/introducing-adafruit-itsybitsy-m4/pinouts
+    https://wiki.seeedstudio.com/Wio-Terminal-Getting-Started/#pinout-diagram
 
 .. _schematic:
-    https://learn.adafruit.com/introducing-adafruit-itsybitsy-m4/downloads
+    https://wiki.seeedstudio.com/Wio-Terminal-Getting-Started/#resources
 
 .. _J-Link:
     https://www.segger.com/products/debug-probes/j-link/technology/interface-description/
