@@ -1,12 +1,12 @@
 .. _wio_terminal:
 
 Wio Terminal
-#############################
+############
 
 Overview
 ********
 
-The WIo Terminal is a small (72 mm x 57 mm x 12 mm) and powerful ARM board
+The Wio Terminal is a small (72 mm x 57 mm x 12 mm) and powerful ARM board
 with wireless connectivity (bluetooth and 2.4GHz/5GHz Wi-Fi), LCD display,
 USB C port, FPC connector, MicroSD card slot, Raspberry pi compatible 40pin
 header and 2 Grove connectors.
@@ -20,6 +20,7 @@ Hardware
 ********
 
 Chips:
+
 - primary chip: ATSAMD51P19 ARM Cortex-M4 processor at 120 MHzF
 - 512 KB of flash memory and 192 KB of RAM
 - 4 MB of external flash
@@ -30,6 +31,7 @@ Chips:
 - A user LED
 
 Built-in Modules:
+
 - Accelerometer LIS3DHTR
 - Microphone 1.0V-10V -42dB
 - Speaker ≥78dB @10cm 4000Hz
@@ -37,12 +39,14 @@ Built-in Modules:
 - Infrared Emitter 940nm
 
 Interface:
+
 - MicroSD Card Slot
 - GPIO 40 pin (Raspberry Pi compatible)
 - 2x Grove connectors
 - USB C port (Power & USB-OTG)
 
 Operation Interface:
+
 - 3x user buttons
 - 5-way user button
 - power/reset/boot mode switch
@@ -169,19 +173,23 @@ Flashing
 Debugging
 =========
 
-In addition to the built-in bootloader, the ItsyBitsy can be flashed and
+In addition to the built-in bootloader, the Wio Terminal can be flashed and
 debugged using a SWD probe such as the Segger J-Link.
+
+#.  Solder cables to the code:`SWCLK`, :code:`SWDIO`, :code:`RESET`,
+    :code:`GND`, and :code:`3V3` pins. See `Test with SWD`_ for more
+    information.
 
 #. Connect the board to the probe by connecting the :code:`SWCLK`,
    :code:`SWDIO`, :code:`RESET`, :code:`GND`, and :code:`3V3` pins on the
-   ItsyBitsy to the :code:`SWCLK`, :code:`SWDIO`, :code:`RESET`, :code:`GND`,
-   and :code:`VTref` pins on the `J-Link`_.
+   Wio Terminal to the :code:`SWCLK`, :code:`SWDIO`, :code:`RESET`, 
+   :code:`GND`, and :code:`VTref` pins on the `J-Link`_.
 
 #. Flash the image:
 
    .. zephyr-app-commands::
       :zephyr-app: samples/hello_world
-      :board: adafruit_itsybitsy_m4_express
+      :board: wio_terminal 
       :goals: flash -r openocd
       :compact:
 
@@ -189,7 +197,7 @@ debugged using a SWD probe such as the Segger J-Link.
 
    .. zephyr-app-commands::
       :zephyr-app: samples/hello_world
-      :board: adafruit_itsybitsy_m4_express
+      :board: wio_terminal 
       :goals: debug
       :compact:
 
@@ -206,6 +214,8 @@ References
 
 .. _schematic:
     https://wiki.seeedstudio.com/Wio-Terminal-Getting-Started/#resources
+.. _Test with SWD:
+    https://wiki.seeedstudio.com/Wio-Terminal-Getting-Started/#test-with-swd
 
 .. _J-Link:
     https://www.segger.com/products/debug-probes/j-link/technology/interface-description/
