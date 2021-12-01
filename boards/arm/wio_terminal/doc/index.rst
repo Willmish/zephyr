@@ -129,46 +129,27 @@ will be entered automatically when you run :code:`west flash`. (Note: The board 
 Flashing
 ========
 
-#. Build the Zephyr kernel and the :ref:`hello_world` sample application:
+#. Build the Zephyr kernel and the :ref:`button` sample application:
 
    .. zephyr-app-commands::
-      :zephyr-app: samples/hello_world
-      :board: adafruit_itsybitsy_m4_express
+      :zephyr-app: samples/basic/button
+      :board: wio_terminal 
       :goals: build
       :compact:
 
-#. Connect the ItsyBitsy to your host computer using USB
-
-#. Connect a 3.3 V USB to serial adapter to the board and to the
-   host.  See the `Serial Port`_ section above for the board's pin
-   connections.
-
-#. Run your favorite terminal program to listen for output. Under Linux the
-   terminal should be :code:`/dev/ttyUSB0`. For example:
-
-   .. code-block:: console
-
-      $ minicom -D /dev/ttyUSB0 -o
-
-   The -o option tells minicom not to send the modem initialization
-   string. Connection should be configured as follows:
-
-   - Speed: 115200
-   - Data: 8 bits
-   - Parity: None
-   - Stop bits: 1
-
-#. Tap the reset button twice quickly to enter bootloader mode
+#. Swipe the reset/power button down twice quickly to enter bootloader mode
 
 #. Flash the image:
 
    .. zephyr-app-commands::
-      :zephyr-app: samples/hello_world
-      :board: adafruit_itsybitsy_m4_express
+      :zephyr-app: samples/basic/button
+      :board: wio_terminal 
       :goals: flash
       :compact:
 
-   You should see "Hello World! arm" in your terminal.
+   You should see the blue (user) LED flashing whenever you press the 
+   third (counting from the top left) user button at the top of the
+   Wio Terminal.
 
 Debugging
 =========
@@ -188,7 +169,7 @@ debugged using a SWD probe such as the Segger J-Link.
 #. Flash the image:
 
    .. zephyr-app-commands::
-      :zephyr-app: samples/hello_world
+      :zephyr-app: samples/basic/button
       :board: wio_terminal 
       :goals: flash -r openocd
       :compact:
@@ -196,7 +177,7 @@ debugged using a SWD probe such as the Segger J-Link.
 #. Start debugging:
 
    .. zephyr-app-commands::
-      :zephyr-app: samples/hello_world
+      :zephyr-app: samples/basic/button
       :board: wio_terminal 
       :goals: debug
       :compact:
