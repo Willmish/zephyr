@@ -22,15 +22,6 @@ LOG_MODULE_REGISTER(i2c_eos_s3);
 /* Macros */
 #define EOS_S3_MAX_I2C_IDX      (1)
 
-#define I2C_REG(config, reg)	((mem_addr_t) ((config)->base + reg))
-#define IS_SET(config, reg, value) (sys_read8(I2C_REG(config, reg)) & (value))
-
-/* Register Offsets */
-
-/* Values */
-
-/* Structure declarations */
-
 struct i2c_eos_s3_cfg {
     uint32_t idx;
 	uint32_t base;
@@ -68,96 +59,6 @@ static inline int i2c_eos_s3_translate_config(const struct *i2c_eos_s3_cfg confi
     hal_config->eI2CInt = I2C_DISABLE;
     hal_config->ucI2Cn = config->idx;
     return 0;
-}
-
-static int i2c_sifive_write_msg(const struct device *dev,
-				struct i2c_msg *msg,
-				uint16_t addr)
-{
-	const struct i2c_sifive_cfg *config = dev->config;
-	int rc = 0;
-	uint8_t command = 0U;
-
-	rc = i2c_sifive_send_addr(dev, addr, SF_TX_WRITE);
-	if (rc != 0) {
-		LOG_ERR("I2C failed to write message\n");
-		return rc;
-	}
-
-	for (uint32_t i = 0; i < msg->len; i++) {
-		/* Wait for a previous transfer */
-		while (i2c_sifive_busy(dev)) {
-		}
-
-		/* Put data in transmit reg */
-		sys_write8((msg->buf)[i], I2C_REG(config, REG_TRANSMIT));
-
-		/* Generate command byte */
-		command = SF_CMD_WRITE;
-
-		/* On the last byte of the message */
-		if (i == (msg->len - 1)) {
-			/* If the stop bit is requested, set it */
-			if (msg->flags & I2C_MSG_STOP) {
-				command |= SF_CMD_STOP;
-			}
-		}
-
-		/* Write command reg */
-		sys_write8(command, I2C_REG(config, REG_COMMAND));
-
-		/* Wait for a previous transfer */
-		while (i2c_sifive_busy(dev)) {
-		}
-
-		if (IS_SET(config, REG_STATUS, SF_STATUS_RXACK)) {
-			LOG_ERR("I2C Rx failed to acknowledge\n");
-			return -EIO;
-		}
-	}
-
-	return 0;
-}
-
-static int i2c_sifive_read_msg(const struct device *dev,
-			       struct i2c_msg *msg,
-			       uint16_t addr)
-{
-	const struct i2c_sifive_cfg *config = dev->config;
-	uint8_t command = 0U;
-
-	i2c_sifive_send_addr(dev, addr, SF_TX_READ);
-
-	while (i2c_sifive_busy(dev)) {
-	}
-
-	for (int i = 0; i < msg->len; i++) {
-		/* Generate command byte */
-		command = SF_CMD_READ;
-
-		/* On the last byte of the message */
-		if (i == (msg->len - 1)) {
-			/* Set NACK to end read */
-			command |= SF_CMD_ACK;
-
-			/* If the stop bit is requested, set it */
-			if (msg->flags & I2C_MSG_STOP) {
-				command |= SF_CMD_STOP;
-			}
-		}
-
-		/* Write command reg */
-		sys_write8(command, I2C_REG(config, REG_COMMAND));
-
-		/* Wait for the read to complete */
-		while (i2c_sifive_busy(dev)) {
-		}
-
-		/* Store the received byte */
-		(msg->buf)[i] = sys_read8(I2C_REG(config, REG_RECEIVE));
-	}
-
-	return 0;
 }
 
 /* API Functions */
