@@ -69,13 +69,15 @@ static void eos_s3_cru_init(void)
 	while (!(PMU->FFE_STATUS & 0x1))
 		;
 
+    /* The below is based on EOS S3 Technical Reference Manual, Chapter 36.1 Setup FFE clocks */
 	/* Setup the Clock Source as OSC */
 	CRU->CLK_CTRL_A_1 &= 0xFFFFFFFC;
 	CRU->CLK_SWITCH_FOR_C &= 0xFFFFFFFE;
 
 	/* Setup the Divider */
 	CRU->CLK_CTRL_A_0 = (CLK_CTRL_CLK_DIVIDER_ENABLE | CLK_CTRL_CLK_DIVIDER_RATIO_6);
-	CRU->C01_CLK_DIV = (0x5 | CLK_CTRL_CLK_DIVIDER_RATIO_6);
+    /* CLK_Control_A_0 impacts C10 frequency. And C01 is a divided down clock from C10 */
+	/* CRU->C01_CLK_DIV = (0x5 | CLK_CTRL_CLK_DIVIDER_RATIO_6); */
 	CRU->CLK_CTRL_C_0 = (CLK_CTRL_CLK_DIVIDER_ENABLE | CLK_CTRL_CLK_DIVIDER_RATIO_6);
 
 	/* Enable FFE clocks for I2C peripherals */
