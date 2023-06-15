@@ -54,6 +54,7 @@
 	fpga0: fpga {
 		status = "okay";
 	};
+
 };
 
 &cpu0 {
@@ -67,4 +68,8 @@
 &uart0 {
 	status = "okay";
 	current-speed = <115200>;
+};
+
+&i2c0 {
+    status = "okay";
 };
