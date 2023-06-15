@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#define DT_DRV_COMPAT eos_s3_i2c0
+#define DT_DRV_COMPAT quicklogic_eos_s3_i2c0
 
 #define LOG_LEVEL CONFIG_I2C_LOG_LEVEL
 #include <zephyr/logging/log.h>
@@ -55,7 +55,7 @@ static inline int i2c_eos_s3_translate_config(const struct *i2c_eos_s3_cfg confi
 	//}
     //
     // TODO: for now static config
-    hal_config->eI2CFreq = I2C_100KHZ;
+    hal_config->eI2CFreq = I2C_400KHZ;
     hal_config->eI2CInt = I2C_DISABLE;
     hal_config->ucI2Cn = config->idx;
     return 0;
@@ -221,3 +221,18 @@ static struct i2c_driver_api i2c_eos_s3_api = {
 			    &i2c_eos_s3_api);
 
 DT_INST_FOREACH_STATUS_OKAY(I2C_EOS_S3_INIT)
+//const struct i2c_eos_s3_cfg i2c_eos_s3_cfg = {
+//    .idx = 0,
+//    .base = NULL,
+//    .f_sys = NULL,
+//    .f_bus = NULL
+//};
+//
+//DEVICE_DT_INST_DEFINE(0,
+//        i2c_eos_s3_init,
+//        NULL,
+//        NULL,
+//        &i2c_eos_s3_cfg,
+//        POST_KERNEL,
+//        CONFIG_I2C_INIT_PRIORITY,
+//        &i2c_eos_s3_api);
