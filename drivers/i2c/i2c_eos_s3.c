@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#define DT_DRV_COMPAT quicklogic_eos_s3_i2c0
+#define DT_DRV_COMPAT quicklogic_eos_s3_i2c
 
 #define LOG_LEVEL CONFIG_I2C_LOG_LEVEL
 #include <zephyr/logging/log.h>
@@ -208,8 +208,8 @@ static struct i2c_driver_api i2c_eos_s3_api = {
 	static struct i2c_eos_s3_cfg i2c_eos_s3_cfg_##n = { \
         .idx = n \
 		.base = DT_INST_REG_ADDR(n), \
-		.f_sys = SIFIVE_PERIPHERAL_CLOCK_FREQUENCY, \
-		.f_bus = DT_INST_PROP(n, clock_frequency), \
+		.f_sys = 0, \
+		.f_bus = 0, \
 	}; \
 	I2C_DEVICE_DT_INST_DEFINE(n, \
 			    i2c_eos_s3_init, \
@@ -219,6 +219,10 @@ static struct i2c_driver_api i2c_eos_s3_api = {
 			    POST_KERNEL, \
 			    CONFIG_I2C_INIT_PRIORITY, \
 			    &i2c_eos_s3_api);
+
+#if DT_NUM_INST_STATUS_OKAY(DT_DRV_COMPAT) == 0
+#error"EOS S3 I2C dev is not defined in DTS"
+#endif
 
 DT_INST_FOREACH_STATUS_OKAY(I2C_EOS_S3_INIT)
 //const struct i2c_eos_s3_cfg i2c_eos_s3_cfg = {

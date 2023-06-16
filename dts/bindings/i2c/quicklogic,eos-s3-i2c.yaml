@@ -3,7 +3,7 @@
 
 description: Quicklogic EOS S3 I2C interface
 
-compatible: "quicklogic,eos-s3-i2c0"
+compatible: "quicklogic,eos-s3-i2c"
 
 include: i2c-controller.yaml
 
