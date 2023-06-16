@@ -31,7 +31,7 @@ struct i2c_eos_s3_cfg {
 
 /* Helper functions */
 
-static inline int i2c_eos_s3_translate_config(const struct *i2c_eos_s3_cfg config,
+static inline int i2c_eos_s3_translate_config(const struct i2c_eos_s3_cfg *config,
                                               I2C_Config *hal_config)
 {
     if (config->idx > EOS_S3_MAX_I2C_IDX)
@@ -149,6 +149,15 @@ static int i2c_eos_s3_transfer(const struct device *dev,
 		return -EINVAL;
 	}
 
+    printk("buf0 : %x, size: %d, buf1: %d, size: %d\n", (uint8_t) *msgs[0].buf, msgs[0].len, (uint8_t) *msgs[1].buf, msgs[1].len);
+    printk("Address: %x\n", addr);
+    rc = HAL_I2C_Read(addr, *msgs[0].buf, msgs[1].buf, msgs[1].len);
+    if (rc != 0) {
+        LOG_ERR("I2C failed to transfer messages\n");
+        return rc;
+    }
+
+    /*
 	for (int i = 0; i < num_msgs; i++) {
 		if (msgs[i].flags & I2C_MSG_READ) {
             rc = HAL_I2C_Read(config->base, addr, msgs[i].buf, msgs[i].len);
@@ -161,6 +170,7 @@ static int i2c_eos_s3_transfer(const struct device *dev,
 			return rc;
 		}
 	}
+    */
 
 	return 0;
 };
@@ -169,7 +179,7 @@ static int i2c_eos_s3_init(const struct device *dev)
 {
 	const struct i2c_eos_s3_cfg *config = dev->config;
 	//uint32_t dev_config = 0U;
-    struct I2C_Config hal_config;
+    I2C_Config hal_config;
 	int rc = 0;
 
 	//dev_config = (I2C_MODE_CONTROLLER | i2c_map_dt_bitrate(config->f_bus));
@@ -181,7 +191,7 @@ static int i2c_eos_s3_init(const struct device *dev)
 	//	return rc;
 	//}
 
-    rc = i2c_eos_s3_translate_config(config, hal_config);
+    rc = i2c_eos_s3_translate_config(config, &hal_config);
 	if (rc != 0) {
 		LOG_ERR("Failed to translate I2C config to HAL");
 		return rc;
@@ -206,7 +216,7 @@ static struct i2c_driver_api i2c_eos_s3_api = {
 
 #define I2C_EOS_S3_INIT(n) \
 	static struct i2c_eos_s3_cfg i2c_eos_s3_cfg_##n = { \
-        .idx = n \
+        .idx = n, \
 		.base = DT_INST_REG_ADDR(n), \
 		.f_sys = 0, \
 		.f_bus = 0, \
