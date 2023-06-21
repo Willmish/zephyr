@@ -133,7 +133,7 @@ static int i2c_eos_s3_transfer(const struct device *dev,
                                uint8_t num_msgs,
                                uint16_t addr)
 {
-	const struct i2c_eos_s3_cfg *config = dev->config;
+	//const struct i2c_eos_s3_cfg *config = dev->config;
 	int rc = 0;
 
 	/* Check for NULL pointers */
@@ -149,6 +149,37 @@ static int i2c_eos_s3_transfer(const struct device *dev,
 		return -EINVAL;
 	}
 
+    /* I understand this atm that - almost all i2c interfaces work by calling i2c_write_read which follows
+    * the common operation transaction pair: "this is what I want", "now give it to me", a combined read then
+    * write transaction. In this transaction, first msg[0] must always be I2C_MSG_WRITE and contain in buf the
+    * reg/memory offset in the i2c device where to read/write form
+    * 
+    * NOTE: Currently (for the sake of HAL implementation) assuming msgs[0].buf is an I2C_MSG_WRITE and of type UINT8_t
+    */
+    printk("Len: %d, flag: %ld, is_flag: %ld\n", num_msgs, I2C_MSG_READ, msgs[0].flags & I2C_MSG_READ);
+    if (num_msgs < 2 || msgs[0].flags != I2C_MSG_WRITE) {
+        LOG_ERR("Currently only implemented READ then WRITE transcations.");
+        return -EINVAL;
+    }
+    if (msgs[0].len != 1) {
+        LOG_ERR("Currently only implemented READ then WRITE transcations: First message must be 1 byte long.");
+        return -EINVAL;
+    }
+    const uint8_t *reg_addr = msgs[0].buf;
+    for (int i = 1; i < num_msgs; ++i) {
+		if (msgs[i].flags & I2C_MSG_READ) {
+            rc = HAL_I2C_Read(addr, *reg_addr, msgs[i].buf, msgs[i].len);
+		} else {
+            rc = HAL_I2C_Write(addr, *reg_addr, msgs[i].buf, msgs[i].len);
+		}
+		if (rc != 0) {
+			LOG_ERR("I2C failed to transfer messages\n");
+			return rc;
+		}
+    }
+
+    
+    /*
     printk("buf0 : %x, size: %d, buf1: %d, size: %d\n", (uint8_t) *msgs[0].buf, msgs[0].len, (uint8_t) *msgs[1].buf, msgs[1].len);
     printk("Address: %x\n", addr);
     rc = HAL_I2C_Read(addr, *msgs[0].buf, msgs[1].buf, msgs[1].len);
@@ -156,6 +187,7 @@ static int i2c_eos_s3_transfer(const struct device *dev,
         LOG_ERR("I2C failed to transfer messages\n");
         return rc;
     }
+    */
 
     /*
 	for (int i = 0; i < num_msgs; i++) {

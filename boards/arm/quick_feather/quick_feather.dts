@@ -73,4 +73,8 @@
 &i2c0 {
     status = "okay";
     clock-frequency = <400000>;
+    lis2dh12: lis2dh12@18 {
+        compatible = "st,lis2dh12", "st,lis2dh";
+        reg = <0x18>;
+    };
 };
