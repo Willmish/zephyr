@@ -155,9 +155,18 @@ static int i2c_eos_s3_transfer(const struct device *dev,
     * reg/memory offset in the i2c device where to read/write form
     * 
     * NOTE: Currently (for the sake of HAL implementation) assuming msgs[0].buf is an I2C_MSG_WRITE and of type UINT8_t
+    * NOTE2: Currently, if message len is 1, it is assumed to be an i2c_reg_write_byte call, which stores the msg in the format: uint8_t tx_buf[2] = {reg_addr, value}
     */
-    printk("Len: %d, flag: %ld, is_flag: %ld\n", num_msgs, I2C_MSG_READ, msgs[0].flags & I2C_MSG_READ);
+    //printk("Len: %d, flag: %ld, is_flag: %ld\n", num_msgs, I2C_MSG_READ, msgs[0].flags & I2C_MSG_READ);
+    //printk("Msg: %x\n", (uint8_t) *msgs[0].buf);
     if (num_msgs < 2 || msgs[0].flags != I2C_MSG_WRITE) {
+
+        if (msgs[0].flags == (I2C_MSG_WRITE | I2C_MSG_STOP) && msgs[0].len == 2) {
+            /* This is a i2c_write call, probably a i2c_reg_write_byte call */
+            const uint8_t reg_addr = msgs[0].buf[0];
+            rc = HAL_I2C_Write(addr, reg_addr, msgs[0].buf+1, msgs[0].len-1);
+            return rc;
+        }
         LOG_ERR("Currently only implemented READ then WRITE transcations.");
         return -EINVAL;
     }
@@ -167,6 +176,7 @@ static int i2c_eos_s3_transfer(const struct device *dev,
     }
     const uint8_t *reg_addr = msgs[0].buf;
     for (int i = 1; i < num_msgs; ++i) {
+        //printk("Msg: %x\n", (uint8_t) *msgs[i].buf);
 		if (msgs[i].flags & I2C_MSG_READ) {
             rc = HAL_I2C_Read(addr, *reg_addr, msgs[i].buf, msgs[i].len);
 		} else {
