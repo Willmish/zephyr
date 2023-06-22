@@ -77,4 +77,8 @@
         compatible = "st,lis2dh12", "st,lis2dh";
         reg = <0x18>;
     };
+    max30102: max30102@57 {
+        compatible = "maxim,max30101";
+        reg = <0x57>;
+    };
 };
