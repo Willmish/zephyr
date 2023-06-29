@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2020 Antmicro <www.antmicro.com>
+ * Copyright (c) 2023 Szymon Duchniewicz
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -54,7 +55,6 @@
 	fpga0: fpga {
 		status = "okay";
 	};
-
 };
 
 &cpu0 {
@@ -73,12 +73,4 @@
 &i2c0 {
     status = "okay";
     clock-frequency = <400000>;
-    lis2dh12: lis2dh12@18 {
-        compatible = "st,lis2dh12", "st,lis2dh";
-        reg = <0x18>;
-    };
-    max30102: max30102@57 {
-        compatible = "maxim,max30101";
-        reg = <0x57>;
-    };
 };
